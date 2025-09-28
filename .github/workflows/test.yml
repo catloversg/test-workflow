@@ -1,0 +1,27 @@
+name: Test
+
+on:
+  pull_request:
+    branches: [master, dev]
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Commit and push changes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo $(date +%s) > test.txt
+          git config --global user.email "workflow@github.com"
+          git config --global user.name "workflow"
+          git add .
+          git commit -m "Test commit"
+          git push
